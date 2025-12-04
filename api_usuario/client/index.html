@@ -1,0 +1,556 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>API Usuarios - Client</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #4a4a4a 0%, #6c6c6c 50%, #8c8c8c 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 30px auto;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+  
+  header {
+    background: linear-gradient(135deg, #3c3c3c 0%, #5a5a5a 100%);
+    padding: 28px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #2c2c2c;
+  }
+  
+  h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+  }
+  
+  h3 {
+    color: #3c3c3c;
+    font-weight: 600;
+    margin-bottom: 24px;
+    font-size: 1.1rem;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #d0d0d0;
+  }
+  
+  section {
+    padding: 48px 60px 60px;
+  }
+  
+  .form-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+  
+  .form-card {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 32px;
+    border: 1px solid #d0d0d0;
+    transition: all 0.3s ease;
+  }
+  
+  .form-card:hover {
+    border-color: #6c6c6c;
+    box-shadow: 0 2px 12px rgba(60, 60, 60, 0.1);
+  }
+  
+  .form-card h4 {
+    color: #3c3c3c;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  input, button, select {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #c0c0c0;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+  
+  input[type=text], input[type=email], input[type=password], select {
+    background: white;
+    outline: none;
+    color: #3c3c3c;
+    font-weight: 400;
+  }
+  
+  input:focus, select:focus {
+    border-color: #6c6c6c;
+    box-shadow: 0 0 0 2px rgba(108, 108, 108, 0.08);
+  }
+  
+  button {
+    background: linear-gradient(135deg, #4a4a4a 0%, #5a5a5a 100%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 13px 24px;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+  
+  button:hover {
+    background: linear-gradient(135deg, #5a5a5a 0%, #3c3c3c 100%);
+    box-shadow: 0 4px 12px rgba(60, 60, 60, 0.2);
+  }
+  
+  button:active {
+    transform: translateY(1px);
+  }
+  
+  .users {
+    margin-top: 12px;
+  }
+  
+  #usersList {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 24px;
+    border: 1px solid #d0d0d0;
+  }
+  
+  .user {
+    padding: 18px 24px;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    border-left: 3px solid #6c6c6c;
+    transition: all 0.2s ease;
+  }
+  
+  .user:hover {
+    box-shadow: 0 2px 8px rgba(60, 60, 60, 0.12);
+    border-left-color: #4a4a4a;
+  }
+  
+  .user:last-child {
+    margin-bottom: 0;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+  
+  .user-name {
+    font-weight: 600;
+    color: #3c3c3c;
+    font-size: 0.95rem;
+  }
+  
+  .user-email {
+    color: #757575;
+    font-size: 0.85rem;
+  }
+  
+  .user-role {
+    display: inline-block;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, #5a5a5a 0%, #4a4a4a 100%);
+    color: white;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+  }
+  
+  #authBox {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  #authBox span {
+    font-weight: 500;
+    color: #ffffff;
+    font-size: 0.9rem;
+  }
+  
+  #logoutBtn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    border-radius: 30px;
+    padding: 7px 18px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+  }
+  
+  #logoutBtn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .del {
+    background: linear-gradient(135deg, #707070 0%, #606060 100%);
+    color: white;
+    padding: 9px 18px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+  
+  .del:hover {
+    background: linear-gradient(135deg, #505050 0%, #404040 100%);
+    box-shadow: 0 2px 8px rgba(80, 80, 80, 0.3);
+  }
+  
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 18px 28px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 1000;
+    max-width: 420px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+  }
+  
+  .notification.success {
+    background: linear-gradient(135deg, #6c6c6c 0%, #7c7c7c 100%);
+    box-shadow: 0 8px 24px rgba(108, 108, 108, 0.4);
+  }
+  
+  .notification.error {
+    background: linear-gradient(135deg, #4a4a4a 0%, #5a5a5a 100%);
+    box-shadow: 0 8px 24px rgba(74, 74, 74, 0.4);
+  }
+  
+  .notification.info {
+    background: linear-gradient(135deg, #5a5a5a 0%, #6c6c6c 100%);
+    box-shadow: 0 8px 24px rgba(90, 90, 90, 0.4);
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @media(max-width: 1024px) {
+    .container {
+      max-width: 95%;
+    }
+    
+    section {
+      padding: 40px;
+    }
+    
+    .form-section {
+      gap: 24px;
+    }
+  }
+  
+  @media(max-width: 768px) {
+    body {
+      padding: 10px;
+    }
+    
+    .container {
+      margin: 10px;
+    }
+    
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px 30px;
+    }
+    
+    h1 {
+      font-size: 1.3rem;
+    }
+    
+    section {
+      padding: 30px;
+    }
+    
+    .form-section {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    
+    .form-card {
+      padding: 24px;
+    }
+    
+    .user {
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 16px 20px;
+    }
+    
+    #authBox {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .notification {
+      right: 10px;
+      left: 10px;
+      max-width: none;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Sistema de Gestão de Usuários</h1>
+    <div id="authBox"></div>
+  </header>
+  <section>
+    <div class="form-section">
+      <div class="form-card">
+        <h4>Criar Nova Conta</h4>
+        <form id="registerForm">
+          <input placeholder="Nome completo" id="name" required />
+          <input placeholder="Endereço de e-mail" id="email" type="email" required />
+          <input placeholder="Senha (mínimo 6 caracteres)" id="password" type="password" required />
+          <select id="role">
+            <option value="user">Usuário</option>
+            <option value="manager">Gerente</option>
+            <option value="admin">Administrador</option>
+          </select>
+          <button type="submit">Criar Conta</button>
+        </form>
+      </div>
+      <div class="form-card">
+        <h4>Acessar Sistema</h4>
+        <form id="loginForm">
+          <input placeholder="Endereço de e-mail" id="loginEmail" type="email" required />
+          <input placeholder="Senha" id="loginPassword" type="password" required />
+          <button type="submit">Entrar</button>
+        </form>
+      </div>
+    </div>
+    <div class="users">
+      <h3>Usuários Cadastrados</h3>
+      <div id="usersList"></div>
+    </div>
+  </section>
+</div>
+<script>
+const API = location.origin.replace(/:\/\/.+/, '') ? (window.location.origin) : 'http://localhost:3000';
+const base = 'http://localhost:3000';
+// Sistema de notificações personalizadas
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.style.animation = 'slideIn 0.3s ease-out reverse';
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
+}function showUsers(users){
+  const el = document.getElementById('usersList');
+  el.innerHTML = '';
+  if(users.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:#757575;font-size:1.1rem;">Nenhum usuário cadastrado ainda</div>';
+    return;
+  }
+  users.forEach(u=>{
+    const div = document.createElement('div');
+    div.className='user';
+    div.innerHTML = `
+      <div class="user-info">
+        <div class="user-name">${u.name}</div>
+        <div class="user-email">${u.email}</div>
+        <span class="user-role">${u.role}</span>
+      </div>
+      <div><button data-id='${u.id}' class='del'>Deletar</button></div>
+    `;
+    el.appendChild(div);
+  });
+  Array.from(document.getElementsByClassName('del')).forEach(b=>b.addEventListener('click', async (e)=>{
+    const id = e.target.dataset.id;
+    const token = localStorage.getItem('token');
+    if(!token) {
+      showNotification('❌ Você precisa estar logado para deletar usuários!', 'error');
+      return;
+    }
+    const res = await fetch(`${base}/users/${id}`,{method:'DELETE',headers:{'Authorization':'Bearer '+token}});
+    if(res.status===204) {
+      showNotification('✅ Usuário deletado com sucesso!', 'success');
+      loadUsers();
+    } else if(res.status===403) {
+      showNotification('🚫 Acesso negado! Apenas administradores podem deletar usuários.', 'error');
+    } else if(res.status===401) {
+      showNotification('⚠️ Sua sessão expirou. Faça login novamente.', 'error');
+    } else {
+      showNotification('❌ Erro ao deletar usuário. Tente novamente.', 'error');
+    }
+  }));
+}
+async function loadUsers(){
+  const res = await fetch(base+'/users');
+  const users = await res.json();
+  showUsers(users);
+}
+document.getElementById('registerForm').addEventListener('submit', async (ev)=>{
+  ev.preventDefault();
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const role = document.getElementById('role').value;
+  
+  if(password.length < 6) {
+    showNotification('⚠️ A senha deve ter no mínimo 6 caracteres!', 'error');
+    return;
+  }
+  
+  const res = await fetch(base+'/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password,role})});
+  
+  if(res.status===201){
+    showNotification(`🎉 Bem-vindo, ${name}! Conta criada com sucesso.`, 'success');
+    document.getElementById('registerForm').reset();
+    loadUsers();
+  } else if(res.status===400) {
+    const j = await res.json();
+    if(j.message && j.message.includes('email')) {
+      showNotification('📧 Este e-mail já está cadastrado. Tente fazer login!', 'error');
+    } else if(j.message && j.message.includes('E-mail já cadastrado')) {
+      showNotification('📧 Este e-mail já está cadastrado. Tente fazer login!', 'error');
+    } else {
+      showNotification(`❌ Erro no cadastro: ${j.message || 'Verifique os dados informados.'}`, 'error');
+    }
+  } else {
+    showNotification('❌ Erro ao criar conta. Verifique os dados e tente novamente.', 'error');
+  }
+});
+
+document.getElementById('loginForm').addEventListener('submit', async (ev)=>{
+  ev.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  
+  if(!email || !password) {
+    showNotification('⚠️ Preencha e-mail e senha para continuar!', 'error');
+    return;
+  }
+  
+  const res = await fetch(base+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+  
+  if(res.status===200){
+    const j=await res.json();
+    localStorage.setItem('token', j.token);
+    showNotification(`👋 Olá, ${j.user.name || j.user.email}! Login realizado com sucesso.`, 'success');
+    document.getElementById('loginForm').reset();
+    updateAuthBox(j.user.email);
+  } else if(res.status===401) {
+    showNotification('🔒 E-mail ou senha incorretos. Verifique suas credenciais!', 'error');
+  } else if(res.status===400) {
+    const j = await res.json();
+    showNotification(`⚠️ ${j.message || 'Dados inválidos. Verifique o formato do e-mail.'}`, 'error');
+  } else {
+    showNotification('❌ Erro ao fazer login. Tente novamente mais tarde.', 'error');
+  }
+});
+
+function updateAuthBox(email){
+  const authBox = document.getElementById('authBox');
+  if(email){
+    authBox.innerHTML = `<span>${email}</span><button id="logoutBtn">Sair</button>`;
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+  } else {
+    authBox.innerHTML = '';
+  }
+}
+
+function logout(){
+  localStorage.removeItem('token');
+  updateAuthBox(null);
+  showNotification('👋 Logout realizado com sucesso. Até breve!', 'info');
+}
+
+// Verificar se já está logado ao carregar a página
+const token = localStorage.getItem('token');
+if(token){
+  // Opcional: verificar se o token ainda é válido
+  updateAuthBox('Usuário logado');
+}
+
+loadUsers();
+</script>
+</body>
+</html>
